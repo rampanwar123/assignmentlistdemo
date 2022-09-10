@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Rating from '../../components/rating';
-import {SHADOW, WHITE} from '../../constants/Colors';
+import {BLACK, SHADOW, WHITE} from '../../constants/Colors';
 import Images from '../../constants/Images';
 import {useNavigation} from '@react-navigation/native';
 
@@ -21,7 +21,7 @@ const ListItem = props => {
       <View style={Styles.imageTitleView}>
         <Image source={Images.ic_restaurant} style={Styles.bannerImage} />
         <View style={Styles.description}>
-          <Text>{item.title}</Text>
+          <Text style={{color:BLACK}}>{item.title}</Text>
           <Rating
             disabled={true}
             rating={item.rating}

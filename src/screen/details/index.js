@@ -76,7 +76,7 @@ const Details = props => {
       {_renderRestaurantImages()}
       <View style={Styles.lengthContainer}>
         <View style={Styles.lengthView}>
-          <Text>{data.images.length}</Text>
+          <Text style={{color:BLACK}}>{data.images.length}</Text>
         </View>
       </View>
       {_detailsView()}
