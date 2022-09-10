@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, FlatList, View, Text,ActivityIndicator} from 'react-native';
+import {StyleSheet,BackHandler, FlatList, View, Text,ActivityIndicator} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {THEME_GREEN, WHITE} from '../../constants/Colors';
@@ -13,7 +13,13 @@ const List = () => {
 
   useEffect(() => {
     dispatch(getRestaurantList);
+  
   }, []);
+
+  // const backHandler = BackHandler.addEventListener(
+  //   "hardwareBackPress",
+  //   BackHandler.exitApp()
+  // );
 
   let {listData,loading} = useSelector(state => state.ListReducer);
 

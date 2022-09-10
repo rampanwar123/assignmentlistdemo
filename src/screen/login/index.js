@@ -9,9 +9,10 @@ import {
   Alert,
   ScrollView,
   KeyboardAvoidingView,
+  BackHandler
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {THEME_GREEN, WHITE} from '../../constants/Colors';
+import {BLACK, THEME_GREEN, WHITE} from '../../constants/Colors';
 import Images from '../../constants/Images';
 import Realm from 'realm';
 import {useNavigation} from '@react-navigation/native';
@@ -27,7 +28,13 @@ const Login = () => {
 
   useEffect(() => {
     realm = new Realm({path: 'UserDatabase.realm'});
+    return () => backHandler.remove();
   }, []);
+
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    BackHandler.exitApp()
+  );
 
   const register_user = () => {
     if (!email || emailError || !password || passwordError) {
@@ -73,7 +80,7 @@ const Login = () => {
       <View style={Styles.introView}>
         <Image source={require('../../assets/images/user.png')} />
         <Text style={Styles.welcomeText}>Welcome Back</Text>
-        <Text style={{fontSize: 16}}> Sign to Continue</Text>
+        <Text style={{fontSize: 16,  color: 'black'}}> Sign to Continue</Text>
       </View>
 
       <View style={{padding: 15}}>
@@ -82,6 +89,7 @@ const Login = () => {
           style={Styles.input}
           value={email}
           onChangeText={_onChangeEmail}
+          placeholderTextColor={'gray'}
         />
         <Text style={Styles.errorText}>{emailError}</Text>
         <TextInput
@@ -89,6 +97,7 @@ const Login = () => {
           style={Styles.input}
           value={password}
           onChangeText={_onChangePassword}
+          placeholderTextColor={'gray'}
         />
         <Text style={Styles.errorText}>{passwordError}</Text>
       </View>
@@ -115,6 +124,7 @@ const Login = () => {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:WHITE
   },
   button: {
     backgroundColor: THEME_GREEN,
@@ -136,6 +146,7 @@ const Styles = StyleSheet.create({
     borderColor: '#f0f0f0',
     elevation: 3,
     backgroundColor: WHITE,
+    color:BLACK
   },
   forgotPassword: {alignSelf: 'flex-end', marginRight: 15, color: THEME_GREEN},
   introView: {
