@@ -6,10 +6,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Alert,
-  ScrollView,
-  KeyboardAvoidingView,
-  BackHandler
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BLACK, THEME_GREEN, WHITE} from '../../constants/Colors';
@@ -28,13 +24,7 @@ const Login = () => {
 
   useEffect(() => {
     realm = new Realm({path: 'UserDatabase.realm'});
-    return () => backHandler.remove();
   }, []);
-
-  const backHandler = BackHandler.addEventListener(
-    "hardwareBackPress",
-    BackHandler.exitApp()
-  );
 
   const register_user = () => {
     if (!email || emailError || !password || passwordError) {
