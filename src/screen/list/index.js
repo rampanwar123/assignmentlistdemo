@@ -29,7 +29,7 @@ const List = () => {
       let jsonObject = JSON.parse(value);
       if (jsonObject) {
         console.log('jsonObjectjsonObject', jsonObject);
-        setData(jsonObject);
+        setData(jsonObject?.data);
       } else {
         console.log('2');
         dispatch(getRestaurantList);
