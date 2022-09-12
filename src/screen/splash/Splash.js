@@ -1,62 +1,49 @@
 import React, {useEffect} from 'react';
-import {View,Text} from 'react-native';
-import Realm from 'realm';
+import {View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-let realm;
+import {getData, storeData} from '../../utils/LocalStorage';
 
 const Splash = () => {
-    const navigation=useNavigation()
+  const navigation = useNavigation();
   useEffect(() => {
-    new Realm({
-      path: 'UserDatabase.realm',
-      schema: [
-        {
-          name: 'user_details',
-          properties: {
-            user_id: {type: 'int', default: 0},
-            user_name: 'string',
-            user_password: 'string',
-          },
-        },
-      ],
-    });
-
-   
-    checkUser()
+    localUserData();
   }, []);
 
-  realm = new Realm({path: 'UserDatabase.realm'});
-
   const localUserData = () => {
-    realm.write(() => {
-      var ID =
-        realm.objects('user_details').sorted('user_id', true).length > 0
-          ? realm.objects('user_details').sorted('user_id', true)[0].user_id + 1
-          : 1;
-      realm.create('user_details', {
-        user_id: ID,
-        user_name: 'test@gmail.com',
-        user_password: 'test@123',
-      });
+    getData('isFirstTime').then(value => {
+      let jsonObject = JSON.parse(value);
+      console.log('isFirstTime', jsonObject);
+      if (jsonObject?.isFirstTime === true) {
+        checkUser();
+      } else {
+        console.log('1');
+        let data = {
+          email: 'test@gmail.com',
+          password: 'test@123',
+        };
+        storeData('login_user', JSON.stringify(data));
+        navigation.navigate('Login');
+      }
     });
   };
 
-  const checkUser = ()=>{
-    var user_details = realm.objects('user_details');
-    console.log('user_details',user_details)
-   if(user_details.length>0){
-    navigation.navigate('RestaurantList')
-   }
-   else{
-    localUserData()
-    navigation.navigate('Login')
-   }
-  }
+  const checkUser = () => {
+    getData('login_user').then(value => {
+      let jsonObject = JSON.parse(value);
+      if (jsonObject) {
+        console.log('jsonObject', jsonObject);
+        navigation.navigate('RestaurantList');
+      } else {
+        navigation.navigate('Login');
+      }
+    });
+  };
 
   return (
-      <View />
-     
+    <View>
+      <Text>rgjdfkgdfhgjk</Text>
+    </View>
   );
 };
 
-export default Splash
+export default Splash;

@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BLACK, THEME_GREEN, WHITE} from '../../constants/Colors';
-import Images from '../../constants/Images';
-import Realm from 'realm';
 import {useNavigation} from '@react-navigation/native';
+import {getData, storeData} from '../../utils/LocalStorage';
 
 let realm;
 
@@ -22,9 +21,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setErrorPassword] = useState('');
 
-  useEffect(() => {
-    realm = new Realm({path: 'UserDatabase.realm'});
-  }, []);
+  useEffect(() => {}, []);
 
   const register_user = () => {
     if (!email || emailError || !password || passwordError) {
@@ -33,17 +30,27 @@ const Login = () => {
         !password ? 'Please enter valid password' : passwordError,
       );
     } else {
-      var user_details = realm.objects('user_details');
-      console.log('user_details', user_details);
-      if (
-        user_details[0].user_name === email &&
-        user_details[0].user_password === password
-      ) {
-        navigation.navigate('RestaurantList');
-      } else {
-        setEmailError('Plaese enter valid email');
-        setErrorPassword('Please enter valid password');
-      }
+      getData('login_user').then(value => {
+        let jsonObject = JSON.parse(value);
+        console.log(
+          'jsonObjectjsonObjectjsonObjectjsonObjectjsonObject',
+          jsonObject,
+        );
+        if (jsonObject) {
+          if (jsonObject.email === email && jsonObject.password === password) {
+            navigation.navigate('RestaurantList');
+            let data = {
+              isFirstTime: true,
+            };
+            storeData('isFirstTime', JSON.stringify(data));
+          } else {
+            setEmailError('Plaese enter valid email');
+            setErrorPassword('Please enter valid password');
+          }
+        } else {
+        }
+      });
+      // console.log('user_details', user_details);
     }
   };
 
@@ -70,7 +77,7 @@ const Login = () => {
       <View style={Styles.introView}>
         <Image source={require('../../assets/images/user.png')} />
         <Text style={Styles.welcomeText}>Welcome Back</Text>
-        <Text style={{fontSize: 16,  color: 'black'}}> Sign to Continue</Text>
+        <Text style={{fontSize: 16, color: 'black'}}> Sign to Continue</Text>
       </View>
 
       <View style={{padding: 15}}>
@@ -114,7 +121,7 @@ const Login = () => {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:WHITE
+    backgroundColor: WHITE,
   },
   button: {
     backgroundColor: THEME_GREEN,
@@ -136,7 +143,8 @@ const Styles = StyleSheet.create({
     borderColor: '#f0f0f0',
     elevation: 3,
     backgroundColor: WHITE,
-    color:BLACK
+    color: BLACK,
+    height: 40,
   },
   forgotPassword: {alignSelf: 'flex-end', marginRight: 15, color: THEME_GREEN},
   introView: {
